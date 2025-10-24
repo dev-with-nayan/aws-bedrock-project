@@ -9,8 +9,7 @@ This project sets up an AWS Bedrock Knowledge Base integrated with an Aurora Ser
 3. [Project Structure](#project-structure)
 4. [Deployment Steps](#deployment-steps)
 5. [Using the Scripts](#using-the-scripts)
-6. [Customization](#customization)
-7. [Troubleshooting](#troubleshooting)
+6. [Troubleshooting](#troubleshooting)
 
 ## Project Overview
 
@@ -32,8 +31,6 @@ This project consists of several components:
 The goal is to create a Bedrock Knowledge Base that can leverage data stored in an Aurora Serverless database, with the ability to easily upload supporting documents to S3. This will allow us to ask the LLM for information from the documentation.
 
 ## Prerequisites
-
-Before you begin, ensure you have the following:
 
 - AWS CLI installed and configured with appropriate credentials
 - Terraform installed (version 0.12 or later)
@@ -77,55 +74,53 @@ project-root/
 
 ## Deployment Steps
 
-1. Clone this repository to your local machine.
+1. Navigate to the project Stack 1. This stack includes VPC, Aurora servlerless and S3
 
-2. Navigate to the project Stack 1. This stack includes VPC, Aurora servlerless and S3
-
-3. Initialize Terraform:
+2. Initialize Terraform:
    ```
    terraform init
    ```
 
-4. Review and modify the Terraform variables in `main.tf` as needed, particularly:
+3. Review and modify the Terraform variables in `main.tf` as needed, particularly:
    - AWS region
    - VPC CIDR block
    - Aurora Serverless configuration
    - s3 bucket
 
-5. Deploy the infrastructure:
+4. Deploy the infrastructure:
    ```
    terraform apply
    ```
    Review the planned changes and type "yes" to confirm.
 
-6. After the Terraform deployment is complete, note the outputs, particularly the Aurora cluster endpoint.
+5. After the Terraform deployment is complete, note the outputs, particularly the Aurora cluster endpoint.
 
-7. Prepare the Aurora Postgres database. This is done by running the sql queries in the script/ folder. This can be done through Amazon RDS console and the Query Editor.
+6. Prepare the Aurora Postgres database. This is done by running the sql queries in the script/ folder. This can be done through Amazon RDS console and the Query Editor.
 
-8. Navigate to the project Stack 2. This stack includes Bedrock Knowledgebase
+7. Navigate to the project Stack 2. This stack includes Bedrock Knowledgebase
 
-9. Initialize Terraform:
+8. Initialize Terraform:
    ```
    terraform init
    ```
 
-10. Use the values outputs of the stack 1 to modify the values in `main.tf` as needed:
+9. Use the values outputs of the stack 1 to modify the values in `main.tf` as needed:
      - Bedrock Knowledgebase configuration
 
-11. Deploy the infrastructure:
+10. Deploy the infrastructure:
       ```
       terraform apply
       ```
       - Review the planned changes and type "yes" to confirm.
 
 
-12. Upload pdf files to S3, place your files in the `spec-sheets` folder and run:
+11. Upload pdf files to S3, place your files in the `spec-sheets` folder and run:
       ```
       python scripts/upload_to_s3.py
       ```
       - Make sure to update the S3 bucket name in the script before running.
 
-13. Sync the data source in the knowledgebase to make it available to the LLM.
+12. Sync the data source in the knowledgebase to make it available to the LLM.
 
 ## Using the Scripts
 
@@ -139,19 +134,6 @@ To use it:
 1. Update the `bucket_name` variable in the script with your S3 bucket name.
 2. Optionally, update the `prefix` variable if you want to upload to a specific path in the bucket.
 3. Run `python scripts/upload_to_s3.py`.
-
-## Complete chat app
-
-### Complete invoke model and knoweldge base code
-- Open the bedrock_utils.py file and the following functions:
-  - query_knowledge_base
-  - generate_response
-
-### Complete the prompt validation function
-- Open the bedrock_utils.py file and the following function:
-  - valid_prompt
-
-  Hint: categorize the user prompt
 
 ## Troubleshooting
 
